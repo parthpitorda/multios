@@ -24,6 +24,9 @@ Firestore firestore;
 bool isSwitched = true, isSearch = false, isServiceRunning = false;
 DatabaseHelper databaseHelper;
 
+MethodChannel methodChannel = MethodChannel("coco");
+
+
 final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 class HomeScreen extends StatefulWidget {
@@ -271,6 +274,8 @@ class _HomeScreenState extends State<HomeScreen> {
     firestore = Firestore.instance;
     firestore.settings(persistenceEnabled: true,host: "",sslEnabled: true,timestampsInSnapshotsEnabled: false);
 
+    methodChannel.setMethodCallHandler(myUtilsHandler);
+
     name = new TextEditingController();
     votes = new TextEditingController();
 
@@ -311,19 +316,14 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 void startForegroundService() async {
-  MethodChannel methodChannel = MethodChannel("coco");
-
-  methodChannel.setMethodCallHandler(myUtilsHandler);
 
   if (prefix0.Platform.isAndroid) {
     if (isServiceRunning) {
       isServiceRunning = false;
-      var methodChannel = MethodChannel("coco");
       String data = await methodChannel.invokeMethod("stopService");
       debugPrint(data);
     } else {
       isServiceRunning = true;
-      var methodChannel = MethodChannel("coco");
       String data = await methodChannel.invokeMethod("startService");
       debugPrint(data);
     }

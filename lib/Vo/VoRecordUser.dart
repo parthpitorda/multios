@@ -1,20 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FavouriteData {
-  final String price;
-  final String propertyFile;
+class RecordUser {
+  final String name;
+  final int votes;
   final DocumentReference reference;
 
-  FavouriteData.fromMap(Map<dynamic, dynamic> map, {this.reference})
-      : assert(map['price'] != null),
-        assert(map['propertyFile'] != null),
-        price = map['price'].toString(),
-        propertyFile = map['propertyFile'].toString();
+  RecordUser.fromMap(Map<String, dynamic> map, {this.reference})
+      : assert(map['name'] != null),
+        assert(map['votes'] != null),
+        name = map['name'],
+        votes = map['votes'];
 
-  FavouriteData.fromSnapshot(DocumentSnapshot snapshot)
+  RecordUser.fromSnapshot(DocumentSnapshot snapshot)
       : this.fromMap(snapshot.data, reference: snapshot.reference);
 
   @override
-  String toString() => "Record<$price:$propertyFile>";
+  String toString() => "Record<$name:$votes>";
 
+
+  Map<String, dynamic> toJson() => {
+    "first_name": name,
+    "last_name": votes,
+    "email": name,
+  };
 }

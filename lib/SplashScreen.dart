@@ -1,8 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:multios/DashScreen.dart';
+import 'package:flutter/services.dart';
+import 'package:multios/HomeScreen.dart';
+import 'package:multios/LoginScreen.dart';
+import 'package:multios/WebSocekt.dart';
 import 'package:multios/utils/Utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web_socket_channel/io.dart';
+
+import 'goJuceDoNotDistrub.dart';
+import 'goJuceScreenInsight.dart';
 
 GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -16,7 +24,23 @@ class _SplashScreenState extends State<SplashScreen> {
     return new Timer(
         new Duration(seconds: 2),
         () => {
-          Utils.navigateToSubPage(context, DashScreen()),
+              SharedPreferences.getInstance().then((prefs) => {
+                    if (prefs.getBool(Utils.PREF_ISLOGIN) != null &&
+                        prefs.getBool(Utils.PREF_ISLOGIN))
+                      {
+                        Utils.navigateToSubPage(context, WebSocket(
+                            title: "title",
+                            channel:
+                            IOWebSocketChannel.connect('ws://echo.websocket.org'))),
+                      }
+                    else
+                      {
+                        Utils.navigateToSubPage(context, WebSocket(
+                            title: "title",
+                            channel:
+                            IOWebSocketChannel.connect('ws://echo.websocket.org'))),
+                      }
+                  })
             });
   }
 

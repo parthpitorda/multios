@@ -4,7 +4,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:multios/bloc/CounterBlock.dart';
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:connectivity/connectivity.dart';
 
 class Utils {
   static String PREF_NAME = "name";
@@ -70,6 +73,15 @@ class Utils {
     );
   }
 
+  static Widget getTextViewWithStream(CounterBlock bloc) {
+    return StreamBuilder(
+      // Wrap our widget with a StreamBuilder
+      stream: bloc.getCount, // pass our Stream getter here
+      initialData: 0, // provide an initial data
+      builder: (context, snapshot) =>
+          Text('${snapshot.data}'), // access the data in our Stream here
+    );
+  }
 
   static void simpleShowDialog(BuildContext context) {
     showDialog<String>(
